@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+*{
+  font-family: 'Bodoni Moda';
+  scroll-behavior: smooth;
+}
+@theme {
+  --color-rw-green: #005b3d;
+  --color-rw-green-dark: #002f24;
+  --color-rw-green-deep: #005a3c;
+  --color-rw-gold: #dfc18d;
+  --color-rw-ink: #070707;
+  --color-rw-surface: #f8f8f8;
+
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: "Jost", "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+}
+.Montserrat{
+  font-family: "Montserrat", sans-serif;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+.testimonial-card {
+  transform: none;
+}
+
+@media (min-width: 768px) {
+  .testimonial-card {
+    transform: rotate(var(--rotation));
+  }
+}
