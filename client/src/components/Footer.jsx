@@ -118,6 +118,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 border-t-[1.5px] border-[#d9bd8b]/40 pt-[29px] text-center lg:mt-[59px]">
           <p>© {new Date().getFullYear()} Royal Wedding And Events · New Road, Pokhara, Nepal</p>
+          <p>Made with ❤️ by Sunya Creatives</p>
         </div>
       </div>
     </footer>

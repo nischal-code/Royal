@@ -27,16 +27,20 @@ import WSi1 from "./Wedding/Signage/WSi1.jpeg";
 import WSi2 from "./Wedding/Signage/WSi2.jpeg";
 import WSi3 from "./Wedding/Signage/WSi3.jpeg";
 import WSi4 from "./Wedding/Signage/WSi4.jpeg";
+import WSi5 from "./Wedding/Signage/WSi5.webp";
 
 import WSt1 from "./Wedding/Stage/WSt1.jpeg";
 import WSt2 from "./Wedding/Stage/WSt2.jpeg";
 import WSt3 from "./Wedding/Stage/WSt3.jpeg";
 import WSt4 from "./Wedding/Stage/WSt4.jpeg";
+import WSt5 from "./Wedding/Stage/WSt5.webp";
+import WSt6 from "./Wedding/Stage/WSt6.webp";
 
 import WE1 from "./Wedding/Entrance/WE1.jpeg";
 import WE2 from "./Wedding/Entrance/WE2.jpeg";
 import WE3 from "./Wedding/Entrance/WE3.jpeg";
 import WE4 from "./Wedding/Entrance/WE4.jpeg";
+import WE5 from "./Wedding/Entrance/WE5.webp";
 
 import WM1 from "./Wedding/Mandap/WM1.jpeg";
 import WM2 from "./Wedding/Mandap/WM2.jpeg";
@@ -114,7 +118,7 @@ export const imgs = {
     },
     Wedding:{
         Entrance :[
-            WE1, WE2, WE3, WE4,
+            WE1, WE2, WE3, WE4,WE5,
         ],
         Photobooth:[
             WP1, WP2, WP3, WP4,
@@ -123,10 +127,10 @@ export const imgs = {
             WM1, WM2, WM3, WM4,
         ],
         Signage:[
-            WSi1, WSi2, WSi3, WSi4,
+            WSi1, WSi2, WSi3, WSi4,WSi5
         ],
         Stage:[
-            WSt1, WSt2, WSt3, WSt4,
+            WSt1, WSt2, WSt3, WSt4,WSt5,WSt6
         ]
     },
     Reception:{
