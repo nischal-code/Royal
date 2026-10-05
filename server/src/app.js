@@ -22,7 +22,7 @@ export function createApp() {
   );
   app.use(express.json({ limit: '2mb' }));
   app.use(express.urlencoded({ extended: true }));
-
+app.set('trust proxy', 1)
   // Basic abuse protection on the public form endpoints.
   const formLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,

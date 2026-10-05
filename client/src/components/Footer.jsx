@@ -97,7 +97,8 @@ export default function Footer() {
             <h3 className="mb-5 text-[14px] font-bold uppercase leading-[21px] tracking-[0.02em] text-[#d9bd8b] gap-5">Get in touch</h3>
             <p>New Road, Pokhara, Nepal</p>
             <p className="mt-[21px] flex flex-col gap-5">
-              <a href="tel:+9779856058512" className={linkClass}>+977 9856058512</a>{" "}
+              <a href="tel:+9779856058512" className={linkClass}>+977 9856058512</a>
+              <a href="tel:+9779856058512" className={linkClass}>+977 9806723020</a>
               <a href="mailto:info@royalwedding.com.np" className={linkClass}>info@royalwedding.com.np</a>
             </p>
           </div>
