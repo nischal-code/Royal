@@ -1,6 +1,4 @@
-// Central place every backend call goes through. One base URL, one place
-// to change it (VITE_API_URL in .env), and consistent error handling —
-// the server always replies with { ok: true, ... } or { ok: false, error }.
+import { imgPathByUrl } from "../Imgs/img.js";
 
 export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001/api";
 
@@ -65,10 +63,10 @@ export async function submitPlannerBrief({ details, pkg, selections, references 
     "selections",
     JSON.stringify(
       (selections || []).map((s) => ({
-        day: s.celebration || "general", // no per-day picker in the UI yet — grouped under "general"
+        day: (s.celebration || "general").toLowerCase(), // no per-day picker in the UI yet — grouped under "general"
         imgId: s.id,
         cat: s.category,
-        src: s.src?.split("/Imgs/")[1] || "",
+        src: imgPathByUrl[s.src] || s.src?.split("/Imgs/")[1] || "",
         note: s.note || "",
       }))
     )

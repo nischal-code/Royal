@@ -1,9 +1,12 @@
 import fs from "fs/promises";
 import path from "path";
+import { fileURLToPath } from "url";
 import PDFDocument from "pdfkit";
 import { pkgLabel } from "./packages.js";
 
-const IMAGE_ROOT = path.join(process.cwd(), "src", "Imgs");
+// Resolved from this file (server/src/utils -> server/src/Imgs), so it works no matter
+// which folder the hosting panel starts the Node app from.
+const IMAGE_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "Imgs");
 const GREEN = '#14523d';
 const GREEN_DARK = '#0d3a2a';
 const GOLD = '#a9863a';
@@ -66,9 +69,23 @@ async function getSelectedImageBuffer(src) {
     }
 
     const imagePath = path.join(IMAGE_ROOT, normalized);
+    const buffer = await fs.readFile(imagePath);
 
-    return await fs.readFile(imagePath);
-  } catch {
+    // PDFKit only supports JPEG and PNG, so .webp photos must be converted.
+    // `sharp` also shrinks large photos so the PDF (and email) stays small.
+    try {
+      const { default: sharp } = await import('sharp');
+      return await sharp(buffer)
+        .rotate()
+        .resize({ width: 900, withoutEnlargement: true })
+        .jpeg({ quality: 82 })
+        .toBuffer();
+    } catch {
+      // sharp not installed: fine for jpeg/png, but webp can't be drawn
+      return /\.webp$/i.test(normalized) ? null : buffer;
+    }
+  } catch (err) {
+    console.error(`[pdf] could not load image "${src}" from ${IMAGE_ROOT}: ${err.message}`);
     return null;
   }
 }

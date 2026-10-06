@@ -148,3 +148,12 @@ export const imgs = {
         ]
     }
 };
+const imageFiles = import.meta.glob("./*/*/*.{jpeg,jpg,png,webp}", {
+  eager: true,
+  query: "?url",
+  import: "default",
+});
+
+export const imgPathByUrl = Object.fromEntries(
+  Object.entries(imageFiles).map(([file, url]) => [url, file.replace("./", "")])
+);

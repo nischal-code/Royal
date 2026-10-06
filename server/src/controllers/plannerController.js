@@ -37,9 +37,9 @@ export async function createPlannerBrief(req, res) {
   }));
 
   const brief = await PlannerBrief.create({ details, pkg, selections, references });
-  if(brief){
-    console.log(brief)
-    res.status(201).json({
+
+  // Reply to the browser right away; the PDF + emails are built afterwards.
+  res.status(201).json({
     ok: true,
     brief: {
       id: brief._id,
@@ -48,30 +48,36 @@ export async function createPlannerBrief(req, res) {
       selectionCount: selections.length,
     },
   });
-  }
-  const pkgName = pkgLabel(pkg);
-  const ownerEmail = process.env.OWNER_EMAIL;
-  
-  let pdfAttachment = null;
+
+  // Anything below runs after the response is sent, so it must never throw
+  // (otherwise the error handler would try to send a second response).
   try {
-    const pdfBuffer = await buildBriefPdfBuffer(brief);
-    pdfAttachment = { filename: briefPdfFileName(brief), content: pdfBuffer, contentType: 'application/pdf' };
+    const pkgName = pkgLabel(pkg);
+    const ownerEmail = process.env.OWNER_EMAIL;
+
+    let pdfAttachment = null;
+    try {
+      const pdfBuffer = await buildBriefPdfBuffer(brief);
+      pdfAttachment = { filename: briefPdfFileName(brief), content: pdfBuffer, contentType: 'application/pdf' };
+    } catch (err) {
+      console.error('[pdf] failed to build brief PDF:', err.message);
+    }
+
+    const [ownerResult, clientResult] = await Promise.all([
+      ownerEmail
+        ? sendMailSafe({ to: ownerEmail, ...plannerOwnerEmail(brief, pkgName), attachments: pdfAttachment ? [pdfAttachment] : undefined })
+        : Promise.resolve({ ok: false }),
+      details.email
+        ? sendMailSafe({ to: details.email, ...plannerClientEmail(brief, pkgName), attachments: pdfAttachment ? [pdfAttachment] : undefined })
+        : Promise.resolve({ ok: false }),
+    ]);
+
+    brief.ownerEmailStatus = ownerEmail ? (ownerResult.ok ? 'sent' : 'failed') : 'skipped';
+    brief.clientEmailStatus = details.email ? (clientResult.ok ? 'sent' : 'failed') : 'skipped';
+    await brief.save();
   } catch (err) {
-    console.error('[pdf] failed to build brief PDF:', err.message);
+    console.error('[planner] post-submit work failed:', err.message);
   }
-
-  const [ownerResult, clientResult] = await Promise.all([
-    ownerEmail
-      ? sendMailSafe({ to: ownerEmail, ...plannerOwnerEmail(brief, pkgName), attachments: pdfAttachment ? [pdfAttachment] : undefined })
-      : Promise.resolve({ ok: false }),
-    details.email
-      ? sendMailSafe({ to: details.email, ...plannerClientEmail(brief, pkgName), attachments: pdfAttachment ? [pdfAttachment] : undefined })
-      : Promise.resolve({ ok: false }),
-  ]);
-
-  brief.ownerEmailStatus = ownerEmail ? (ownerResult.ok ? 'sent' : 'failed') : 'skipped';
-  brief.clientEmailStatus = details.email ? (clientResult.ok ? 'sent' : 'failed') : 'skipped';
-  await brief.save();
 }
 
 export async function listPlannerBriefs(req, res) {

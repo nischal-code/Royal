@@ -5,7 +5,7 @@ const SelectionSchema = new mongoose.Schema(
     day: { type: String, required: true }, // haldi | mehendi | wedding | reception
     imgId: { type: String, required: true },
     cat: { type: String, required: true }, // signage | entrance | stage | mandap | haldimehendi | photobooth
-    src: { type: String, required: true }, // existing gallery photo URL (not uploaded — just referenced)
+    src: { type: String, default: '' }, // path inside server/src/Imgs, e.g. 'Haldi/Entrance/HE1.jpeg'
     note: { type: String, default: '' },
   },
   { _id: false }
